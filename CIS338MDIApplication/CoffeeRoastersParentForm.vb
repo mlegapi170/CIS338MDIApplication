@@ -3,15 +3,16 @@
 Public Class CoffeeRoastersParentForm
 
     Private m_ChildFormNumber As Integer
+    Private m_controller As New Controller
 
-    Private Sub ShowNewForm(ByVal sender As Object, ByVal e As EventArgs) Handles NewToolStripMenuItem.Click,  NewWindowToolStripMenuItem.Click
+    Private Sub ShowNewForm(ByVal sender As Object, ByVal e As EventArgs) Handles NewToolStripMenuItem.Click, NewWindowToolStripMenuItem.Click
         ' Create a new instance of the child form.
-        Dim ChildForm As New OrderForm
+        Dim ChildForm As New OrderForm(m_controller)
         ' Make it a child of this MDI form before showing it.
         ChildForm.MdiParent = Me
 
         m_ChildFormNumber += 1
-        ChildForm.Text = "Window " & m_ChildFormNumber
+
 
         ChildForm.Show()
     End Sub
@@ -26,14 +27,27 @@ Public Class CoffeeRoastersParentForm
 
     Private Sub CutToolStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles CutToolStripMenuItem.Click
         ' Use My.Computer.Clipboard to insert the selected text or images into the clipboard
+        If Me.ActiveMdiChild.ActiveControl.Text = "" Then
+        Else
+            My.Computer.Clipboard.SetText(Me.ActiveMdiChild.ActiveControl.Text)
+            Me.ActiveMdiChild.ActiveControl.Text = ""
+        End If
+
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles CopyToolStripMenuItem.Click
         ' Use My.Computer.Clipboard to insert the selected text or images into the clipboard
+        If Me.ActiveMdiChild.ActiveControl.Text = "" Then
+        Else
+            My.Computer.Clipboard.SetText(Me.ActiveMdiChild.ActiveControl.Text)
+        End If
+
     End Sub
 
     Private Sub PasteToolStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles PasteToolStripMenuItem.Click
         'Use My.Computer.Clipboard.GetText() or My.Computer.Clipboard.GetData to retrieve information from the clipboard.
+
+        Me.ActiveMdiChild.ActiveControl.Text = My.Computer.Clipboard.GetText
     End Sub
 
     Private Sub CascadeToolStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles CascadeToolStripMenuItem.Click
@@ -59,7 +73,48 @@ Public Class CoffeeRoastersParentForm
         Next
     End Sub
 
-    Private Sub SaveToolStripMenuItem_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles SaveToolStripMenuItem.Click
 
+    Private Sub CloseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CloseToolStripMenuItem.Click
+        If Me.MdiChildren.Length > 0
+            Me.ActiveMdiChild.Close() 
+        End If
+                  
+    End Sub
+
+    Private Sub EditMenu_DropDownOpened(ByVal sender As Object, ByVal e As System.EventArgs) Handles EditMenu.DropDownOpened
+        If (Not IsNothing(Me.ActiveMdiChild)) Then
+            If Me.ActiveMdiChild.ActiveControl.Name.Contains("txt") Then
+                CutToolStripMenuItem.Enabled = True
+                CopyToolStripMenuItem.Enabled = True
+                If My.Computer.Clipboard.ContainsText Then
+                    PasteToolStripMenuItem.Enabled = True
+                Else
+                    PasteToolStripMenuItem.Enabled = False
+                End If
+
+            Else
+                CutToolStripMenuItem.Enabled = False
+                CopyToolStripMenuItem.Enabled = False
+                PasteToolStripMenuItem.Enabled = False
+            End If
+        Else
+            CutToolStripMenuItem.Enabled = False
+            CopyToolStripMenuItem.Enabled = False
+            PasteToolStripMenuItem.Enabled = False
+        End If
+    End Sub
+
+    Private Sub CoffeeRoastersParentForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        CutToolStripMenuItem.Enabled = False
+        CopyToolStripMenuItem.Enabled = False
+        PasteToolStripMenuItem.Enabled = False
+    End Sub
+
+    Private Sub FileMenu_DropDownOpened(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileMenu.DropDownOpened
+        If Me.MdiChildren.Length = 0
+            CloseToolStripMenuItem.Enabled = False
+            Else
+            CloseToolStripMenuItem.Enabled = True
+        End If
     End Sub
 End Class

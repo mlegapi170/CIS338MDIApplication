@@ -6,7 +6,7 @@
 
     Public Sub new()
         Me.m_orderNum = -1
-        Me.m_serverName = "Error"
+        Me.m_serverName = nothing
         Me.m_timeStamp = Now
         m_itemList = New Collection
     End Sub
@@ -48,7 +48,7 @@
 
     Public Function calculateTotalWithTax() As Double
         Dim value As Double = 0
-        value = calculateTotal * CoffeeConstants.SALESTAX
+        value = calculateTotal + calculateTotal * CoffeeConstants.SALESTAX
         Return value 
     End Function
 
@@ -56,7 +56,7 @@
         If(m_itemList.Contains(myItem.Name))
             Throw New InvalidItemIDException(myItem.Name + " is already in this order.")
         End If
-        m_itemList.Add(myItem, myItem.Name)
+        m_itemList.Add(New OrderItem(myItem, 0), myItem.Name)
     End Sub
 
     Public Function getItem(id As String) As OrderItem
@@ -76,13 +76,33 @@
         m_itemList.Remove(id)
     End Sub
 
+    Public Function getAllItems() As Collection
+        Return m_itemList
+    End Function
+
+    Public Function validateOrder(ByRef message As String) As Boolean
+        Dim result As Boolean = True
+        If m_serverName = Nothing
+            result = False
+            message += "Server name required." + vbNewLine
+        End If
+        If m_itemList.Count = 0 or calculateTotalWithTax < 0.01
+            result = False
+            message += "Order contains no items." + vbNewLine
+        End If
+        If m_orderNum = 0
+            result = False
+            message += "Order number must be greater than 0." + vbNewLine
+        End If
+        Return result
+    End Function
 
 <Serializable()>  _
 Public Class InvalidItemIDException
     Inherits System.Exception
 
     Public Sub New(ByVal message As String)
-        MyBase.New(message)
+        MyBase.New(message & " Change the qunatity if you want to add more of this item.")
     End Sub
 
     Public Sub New(ByVal message As String, ByVal inner As Exception)
