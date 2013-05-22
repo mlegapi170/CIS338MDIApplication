@@ -1,6 +1,9 @@
-﻿Public Class OrderForm
+﻿Imports BusinessLogic
+
+Public Class OrderForm
 
     Private m_mousedown As Boolean = False
+    Private changedFlag As Boolean = False
     Private m_order As Order
     Private m_controller As Controller
     Private m_menu As ArrayList
@@ -22,6 +25,29 @@
         initialTop = btnNewItem.Top
         initialLeft = btnNewItem.Left
         m_orderItemLabels = New ArrayList
+        changedFlag = False
+    End Sub
+
+    Public Sub New(ByRef parentController As Controller, ByVal anOrder As Order)
+        Me.New(parentController)
+        m_order = anOrder
+        lastknowngoodorderNo = m_order.OrderNumber 
+    End Sub
+
+    Private Sub OrderForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If changedFlag
+            Dim result
+            result = MessageBox.Show("Do you want to save your work before closing the order?","Save?",MessageBoxButtons.YesNoCancel, _
+                            MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
+            Select Case result
+                Case DialogResult.Yes
+                    If Not saveForm
+                        e.Cancel = True
+                    End If
+                Case DialogResult.Cancel
+                    e.Cancel = True
+            End Select
+        End If
     End Sub
 
     Private Sub OrderForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -36,7 +62,7 @@
             priceLabel.Left = 140
             priceLabel.Top = itemLabel.Top
             priceLabel.Width = 40
-            priceLabel.TextAlign = ContentAlignment.TopLeft
+            priceLabel.TextAlign = ContentAlignment.TopRight
             'drag drop controls
             AddHandler itemLabel.MouseDown, AddressOf mouseDownAction
             AddHandler itemLabel.MouseMove, AddressOf mouseMoveAction
@@ -49,6 +75,11 @@
         lblDateTime.Text += Now.ToString
         Me.Text += " " & m_order.OrderNumber
         txtOrderNo.Text = m_order.OrderNumber.ToString
+        txtServerName.Text = m_order.ServerName
+        drawOrderItems 
+        updateOrderTotals()
+        updateTotalLabels()
+        changedFlag = false
     End Sub
 
     Private Sub removeItemAction(ByVal sender As Button, ByVal e As System.EventArgs)
@@ -112,6 +143,7 @@
             lblOrderTotal.Text = "Order Total: " & Format(m_order.calculateTotal, "c")
             lblSalesTotal.Text = "Sales Total: " & Format(m_order.calculateTotalWithTax, "c")
         End If
+        changedFlag = True
     End Sub
 
     Private Sub updateTotalLabels()
@@ -259,6 +291,7 @@
             nudQuantity.Value = myOrderItem.Quantity
             nudQuantity.Width = 60
             nudQuantity.Tag = myOrderItem.Item.Name
+            nudQuantity.ReadOnly = True
             AddHandler nudQuantity.ValueChanged, AddressOf quantityChangedAction
 
             lblTotal.Text = "Total: " & Format(myOrderItem.calcTotal, "c")
@@ -290,19 +323,7 @@
     End Sub
 
     Private Sub btnSaveOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveOrder.Click
-        'do validation
-        Dim message As String = Nothing
-        If m_controller.validateOrder(m_order, message) Then
-            m_order.TimeStamp = Now
-            m_controller.addOrder(m_order)
-            MessageBox.Show("Order No. " & m_order.OrderNumber & vbNewLine & "Server Name: " & m_order.ServerName & vbNewLine & _
-                            "Sales Total: " & Format(m_order.calculateTotalWithTax, "c") & vbNewLine & "Saved at " & _
-                            m_order.TimeStamp & ".", "Order Saved", MessageBoxButtons.OK)
-            Me.Close()
-        Else
-            MessageBox.Show("The following needs correcting:" & vbNewLine & message, "Validations Not Passed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-
+        saveForm 
     End Sub
 
     Private Sub btnNewOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNewOrder.Click
@@ -315,6 +336,7 @@
         updateTotalLabels()
         txtOrderNo.Text = m_order.OrderNumber.ToString
         txtServerName.Text = ""
+        changedFlag = False
     End Sub
 
     Private Sub txtOrderNo_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOrderNo.TextChanged
@@ -324,6 +346,7 @@
             lastknowngoodorderNo = result
             
             Me.Text = "New Order " & m_order.OrderNumber
+            changedFlag = True
         Else
             txtOrderNo.Text = lastknowngoodorderNo
         End If
@@ -331,5 +354,42 @@
 
     Private Sub txtServerName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtServerName.TextChanged
         m_order.ServerName = txtServerName.Text
+        changedFlag = True
     End Sub
+
+    Public Function saveForm As Boolean
+        'do validation
+        Dim formSaved As Boolean = False
+        Dim message As String = Nothing
+        Dim isSaving As Boolean = true
+        If m_controller.validateOrder(m_order, message) Then
+            m_order.TimeStamp = Now
+            If not m_controller.addOrder(m_order)
+                'ask if want to update
+                Dim result = MessageBox.Show("Do you wish to update order "& m_order.OrderNumber &"?", "Update Order",MessageBoxButtons.YesNo , _
+                                           MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2)
+                If result = Windows.Forms.DialogResult.Yes 
+                    m_controller.updateOrder(m_order)
+                    Else
+                    isSaving = false
+                End If
+            End if 
+            If isSaving 
+                'send message to parent that an order changed
+                CType(Me.MdiParent, CoffeeRoastersParentForm).updateSummary
+                MessageBox.Show("Order No. " & m_order.OrderNumber & vbNewLine & "Server Name: " & m_order.ServerName & vbNewLine & _
+                                        "Sales Total: " & Format(m_order.calculateTotalWithTax, "c") & vbNewLine & "Saved at " & _
+                                        m_order.TimeStamp & ".", "Order Saved", MessageBoxButtons.OK)
+                changedFlag = False
+                formSaved = True
+                
+            End If
+            'Me.Close()
+        Else
+            MessageBox.Show("The following needs correcting:" & vbNewLine & message, "Validations Not Passed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+        Return formSaved
+    End Function
+
+
 End Class

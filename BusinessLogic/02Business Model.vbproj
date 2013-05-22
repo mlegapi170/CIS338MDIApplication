@@ -2,38 +2,35 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
     </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1BCBB05E-9BD1-4A84-B83E-8A6C3D1C9806}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <StartupObject>CIS338MDIApplication.My.MyApplication</StartupObject>
-    <RootNamespace>CIS338MDIApplication</RootNamespace>
-    <AssemblyName>CIS338MDIApplication</AssemblyName>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{BD9CB821-4BEB-476A-9968-B12A68D3B810}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BusinessLogic</RootNamespace>
+    <AssemblyName>BusinessLogic</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CIS338MDIApplication.xml</DocumentationFile>
+    <DocumentationFile>BusinessLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CIS338MDIApplication.xml</DocumentationFile>
+    <DocumentationFile>BusinessLogic.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -51,9 +48,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,28 +59,13 @@
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
-    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CoffeeConstants.vb" />
-    <Compile Include="CoffeeRoastersParentForm.Designer.vb">
-      <DependentUpon>CoffeeRoastersParentForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="CoffeeRoastersParentForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Controller.vb" />
-    <Compile Include="OrderForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OrderForm.Designer.vb">
-      <DependentUpon>OrderForm.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Item.vb" />
     <Compile Include="ItemDB.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -109,17 +88,11 @@
     <Compile Include="OrderItem.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CoffeeRoastersParentForm.resx">
-      <DependentUpon>CoffeeRoastersParentForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OrderForm.resx">
-      <DependentUpon>OrderForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +105,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\coffeee.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

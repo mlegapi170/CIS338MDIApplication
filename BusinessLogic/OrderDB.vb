@@ -6,15 +6,16 @@
     End Sub
 
     Public Sub addOrder(ByVal myorder As Order) 'add validation here
-        If(Not isValidOrderID(myorder.OrderNumber.ToString))
-            Throw New InvalidOrderIDException("ID already used.")
-            Else
+        'If(Not isValidOrderID(myorder.OrderNumber.ToString))
+        '    Throw New InvalidOrderIDException("ID already used.")
+        '    Else
             m_orders.Add(myorder, myorder.OrderNumber.ToString)
-        End If
+        'End If
     End Sub
 
-    Public Sub updateOrder(ByVal id As Integer)
-
+    Public Sub updateOrder(ByVal myorder As Order)
+        m_orders.Remove(myorder.OrderNumber.ToString)
+        m_orders.Add(myorder, myorder.OrderNumber.ToString)
     End Sub
 
     Public Sub removeOrder(ByVal id As Integer)
@@ -23,7 +24,11 @@
 
     Public Function getOrder(ByVal id As Integer) As Order
         Dim myorder As Order
-
+        If Not isValidOrderID(id)
+            Throw New InvalidOrderIDException("Orer ID not found")
+            Else
+            myorder = m_orders(id.ToString)
+        End If
         Return myorder
     End Function
 
@@ -45,10 +50,10 @@
 
     Public Function validateOrder(ByVal anOrder As Order, ByRef message As String) As Boolean
         Dim result As Boolean = True
-        If Not isValidOrderID(anOrder.OrderNumber)
-            result = False
-            message += "Order Number is already used. Try using " & getNextAvailableOrderNumber & vbNewLine
-        End If
+        'If Not isValidOrderID(anOrder.OrderNumber)
+        '    result = False
+        '    message += "Order Number is already used. Try using " & getNextAvailableOrderNumber & vbNewLine
+        'End If
         If Not anOrder.validateOrder(message)
             result = False
 
@@ -58,11 +63,15 @@
     End Function
 
     Private Function isValidOrderID(ByVal id As Integer) As Boolean
-        Dim result As Boolean = True
+        Dim result As Boolean = false
         If m_orders.Contains(id.ToString)
-            result = False
+            result = True
         End If
         Return result
+    End Function
+
+    public Function getAllOrders() As Collection
+        Return m_orders 
     End Function
 
 <Serializable()>  _

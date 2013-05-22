@@ -4,7 +4,7 @@
 
     Public Sub New(ByVal item As Item, ByVal quantity As Integer)
         m_item = item
-        m_quantity = m_quantity
+        m_quantity = quantity
     End Sub
 
     Public ReadOnly Property Item As Item
@@ -26,5 +26,12 @@
         Dim value As Double = 0.0
             value = m_quantity * m_item.Price
         Return value 
+    End Function
+
+    Public Function copy As OrderItem
+        Dim newQuantity As Integer = 0
+        Dim newOrderItem As New OrderItem(m_item, newQuantity + m_quantity)
+
+        Return newOrderItem 
     End Function
 End Class

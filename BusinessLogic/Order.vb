@@ -90,11 +90,32 @@
             result = False
             message += "Order contains no items." + vbNewLine
         End If
-        If m_orderNum = 0
+        If m_orderNum <= 0
             result = False
             message += "Order number must be greater than 0." + vbNewLine
         End If
+        For Each anOrderItem As OrderItem In m_itemList
+            If anOrderItem.Quantity <= 0
+                result = False
+                message += anOrderItem.Item.Name & " quantity is 0 or less." & vbNewLine
+            End If
+        Next
         Return result
+    End Function
+
+    Public Function copy As Order
+        Dim newOrder As New Order
+        With newOrder
+            .ServerName = ServerName
+            .OrderNumber = OrderNumber
+            .TimeStamp = TimeStamp
+        End With
+
+        For Each anOrderItem As OrderItem In getAllItems
+            newOrder.m_itemList.Add(anOrderItem.copy, anOrderItem.Item.Name)
+        Next
+
+        Return newOrder
     End Function
 
 <Serializable()>  _
