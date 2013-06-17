@@ -1,4 +1,4 @@
-﻿Public Class ItemDB
+﻿Public Class Menu
     Private m_items As Collection
 
     Public Sub New()

@@ -126,11 +126,14 @@ Public Class CoffeeRoastersParentForm
         If (Not IsNothing(Me.ActiveMdiChild)) Then
             If TypeOf Me.ActiveMdiChild Is OrderForm Then
                 SaveToolStripMenuItem.Enabled = True
+                DeleteToolStripMenuItem.Enabled = True
             Else
                 SaveToolStripMenuItem.Enabled = False
+                DeleteToolStripMenuItem.Enabled = False
             End If
         Else
             SaveToolStripMenuItem.Enabled = False
+            DeleteToolStripMenuItem.Enabled = False
         End If
     End Sub
 
@@ -172,4 +175,18 @@ Public Class CoffeeRoastersParentForm
     Private Sub SaveToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SaveToolStripMenuItem.Click
         CType(Me.ActiveMdiChild, OrderForm).saveForm()
     End Sub
+
+Private Sub DeleteToolStripMenuItem_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles DeleteToolStripMenuItem.Click
+        Dim child As OrderForm
+        child = CType(ActiveMdiChild, OrderForm)
+        Dim tempOrderform As Integer = 0
+        tempOrderform += Integer.Parse(child.txtOrderNo.Text)
+        If m_controller.removeOrder(tempOrderform)
+            child.btnNewOrder.PerformClick
+            MessageBox.Show("Order "& tempOrderform & " has been deleted.","Order Deleted",MessageBoxButtons.OK,MessageBoxIcon.Information)
+            updateSummary
+            Else
+            MessageBox.Show("Order does not exist in database.", "Order not deleted",MessageBoxButtons.OK,MessageBoxIcon.Exclamation)
+        End If
+End Sub
 End Class

@@ -134,15 +134,21 @@ Public Class OrderForm
     End Sub
 
     Private Sub updateOrderTotals()
+        lblSalesTaxValue.Width = 60
+        lblOrderTotalValue.Width = 60
+        lblSalesTotalValue.Width = 60
         If m_order.getAllItems.Count = 0 Then
-            lblOrderTax.Text = "Sales Tax: " & Format(0, "c")
-            lblOrderTotal.Text = "Order Total: " & Format(0, "c")
-            lblSalesTotal.Text = "Sales Total: " & Format(0, "c")
+            lblSalesTaxValue.Text = Format(0, "c")
+            lblOrderTotalValue.Text = Format(0, "c")
+            lblSalesTotalValue.Text = Format(0, "c")
         Else
-            lblOrderTax.Text = "Sales Tax: " & Format(m_order.calculateTotal * CoffeeConstants.SALESTAX, "c")
-            lblOrderTotal.Text = "Order Total: " & Format(m_order.calculateTotal, "c")
-            lblSalesTotal.Text = "Sales Total: " & Format(m_order.calculateTotalWithTax, "c")
+            lblSalesTaxValue.Text =  Format(m_order.calculateTotal * CoffeeConstants.SALESTAX, "c")
+            lblOrderTotalValue.Text =  Format(m_order.calculateTotal, "c")
+            lblSalesTotalValue.Text = Format(m_order.calculateTotalWithTax, "c")
         End If
+        lblSalesTaxValue.TextAlign = ContentAlignment.TopRight
+        lblOrderTotalValue.TextAlign = ContentAlignment.TopRight
+        lblSalesTotalValue.TextAlign = ContentAlignment.TopRight
         changedFlag = True
     End Sub
 
@@ -223,6 +229,7 @@ Public Class OrderForm
         lblTotal.Text = "Total: " & Format(0, "c")
         lblTotal.Left = nudQuantity.Right + 3
         lblTotal.Top = btnRemove.Top
+        lblTotal.TextAlign = ContentAlignment.TopRight
 
         pnlOrder.Controls.Add(btnRemove)
         pnlOrder.Controls.Add(cboMenu)
@@ -298,6 +305,7 @@ Public Class OrderForm
             lblTotal.Left = nudQuantity.Right + 3
             lblTotal.Top = btnRemove.Top
             lblTotal.Tag = myOrderItem.Item.Name
+            lblTotal.TextAlign = ContentAlignment.TopRight
             m_orderItemLabels.Add(lblTotal)
 
 
@@ -391,5 +399,24 @@ Public Class OrderForm
         Return formSaved
     End Function
 
+    Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click
+        'ask to delete order
+        Dim result = MessageBox.Show("Delete Order "& m_order.OrderNumber &"?","Delete Order",MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
+        'delete if yes
+        If result = Windows.Forms.DialogResult.Yes
+            'check if order exists in db
+            If m_controller.orderExists(m_order.OrderNumber)
+                'delete order
+                m_controller.removeOrder(m_order.OrderNumber)
+                'cleanup form and update summary forms
+                CType(Me.MdiParent, CoffeeRoastersParentForm).updateSummary
+                btnNewOrder.PerformClick
+                Me.ActiveControl = txtOrderNo
+            Else
+                'show error if order does not exist
+                MessageBox.Show("Order is not in database!","Can not delete",MessageBoxButtons.OK,MessageBoxIcon.Error)
+            End If
+        End If
 
+    End Sub
 End Class

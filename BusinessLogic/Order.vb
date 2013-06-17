@@ -59,6 +59,13 @@
         m_itemList.Add(New OrderItem(myItem, 0), myItem.Name)
     End Sub
 
+    Public Sub addItem(myItem As Item, ByVal quantity As Integer)
+        If(m_itemList.Contains(myItem.Name))
+            Throw New InvalidItemIDException(myItem.Name + " is already in this order.")
+        End If
+        m_itemList.Add(New OrderItem(myItem, quantity), myItem.Name)
+    End Sub
+
     Public Function getItem(id As String) As OrderItem
         Dim myitem As OrderItem
         If(Not m_itemList.Contains(id))

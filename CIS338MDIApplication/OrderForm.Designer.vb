@@ -32,19 +32,23 @@ Partial Class OrderForm
         Me.lblOrderTax = New System.Windows.Forms.Label()
         Me.lblSalesTotal = New System.Windows.Forms.Label()
         Me.grpBoxTotals = New System.Windows.Forms.GroupBox()
+        Me.lblSalesTotalValue = New System.Windows.Forms.Label()
+        Me.lblSalesTaxValue = New System.Windows.Forms.Label()
+        Me.lblOrderTotalValue = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.btnNewOrder = New System.Windows.Forms.Button()
         Me.btnSaveOrder = New System.Windows.Forms.Button()
         Me.btnCloseOrder = New System.Windows.Forms.Button()
         Me.grpOrderInfo = New System.Windows.Forms.GroupBox()
-        Me.lblOrderNo = New System.Windows.Forms.Label()
-        Me.lblServer = New System.Windows.Forms.Label()
-        Me.lblDateTime = New System.Windows.Forms.Label()
-        Me.txtOrderNo = New System.Windows.Forms.TextBox()
         Me.txtServerName = New System.Windows.Forms.TextBox()
+        Me.txtOrderNo = New System.Windows.Forms.TextBox()
+        Me.lblDateTime = New System.Windows.Forms.Label()
+        Me.lblServer = New System.Windows.Forms.Label()
+        Me.lblOrderNo = New System.Windows.Forms.Label()
         Me.tmr = New System.Windows.Forms.Timer(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.btnDelete = New System.Windows.Forms.Button()
         Me.grpMenu.SuspendLayout()
         Me.grpOrder.SuspendLayout()
         Me.pnlOrder.SuspendLayout()
@@ -110,6 +114,7 @@ Partial Class OrderForm
         Me.lblOrderTotal.Size = New System.Drawing.Size(66, 13)
         Me.lblOrderTotal.TabIndex = 2
         Me.lblOrderTotal.Text = "Order Total: "
+        Me.lblOrderTotal.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblOrderTax
         '
@@ -119,6 +124,7 @@ Partial Class OrderForm
         Me.lblOrderTax.Size = New System.Drawing.Size(60, 13)
         Me.lblOrderTax.TabIndex = 3
         Me.lblOrderTax.Text = "Sales Tax: "
+        Me.lblOrderTax.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblSalesTotal
         '
@@ -128,9 +134,13 @@ Partial Class OrderForm
         Me.lblSalesTotal.Size = New System.Drawing.Size(66, 13)
         Me.lblSalesTotal.TabIndex = 4
         Me.lblSalesTotal.Text = "Sales Total: "
+        Me.lblSalesTotal.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'grpBoxTotals
         '
+        Me.grpBoxTotals.Controls.Add(Me.lblSalesTotalValue)
+        Me.grpBoxTotals.Controls.Add(Me.lblSalesTaxValue)
+        Me.grpBoxTotals.Controls.Add(Me.lblOrderTotalValue)
         Me.grpBoxTotals.Controls.Add(Me.lblOrderTotal)
         Me.grpBoxTotals.Controls.Add(Me.lblSalesTotal)
         Me.grpBoxTotals.Controls.Add(Me.lblOrderTax)
@@ -140,6 +150,33 @@ Partial Class OrderForm
         Me.grpBoxTotals.TabIndex = 5
         Me.grpBoxTotals.TabStop = False
         Me.grpBoxTotals.Text = "Totals"
+        '
+        'lblSalesTotalValue
+        '
+        Me.lblSalesTotalValue.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblSalesTotalValue.Location = New System.Drawing.Point(71, 72)
+        Me.lblSalesTotalValue.Name = "lblSalesTotalValue"
+        Me.lblSalesTotalValue.Size = New System.Drawing.Size(0, 13)
+        Me.lblSalesTotalValue.TabIndex = 7
+        Me.lblSalesTotalValue.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblSalesTaxValue
+        '
+        Me.lblSalesTaxValue.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblSalesTaxValue.Location = New System.Drawing.Point(72, 44)
+        Me.lblSalesTaxValue.Name = "lblSalesTaxValue"
+        Me.lblSalesTaxValue.Size = New System.Drawing.Size(0, 13)
+        Me.lblSalesTaxValue.TabIndex = 6
+        Me.lblSalesTaxValue.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'lblOrderTotalValue
+        '
+        Me.lblOrderTotalValue.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblOrderTotalValue.Location = New System.Drawing.Point(72, 19)
+        Me.lblOrderTotalValue.Name = "lblOrderTotalValue"
+        Me.lblOrderTotalValue.Size = New System.Drawing.Size(0, 13)
+        Me.lblOrderTotalValue.TabIndex = 5
+        Me.lblOrderTotalValue.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'PictureBox1
         '
@@ -163,7 +200,7 @@ Partial Class OrderForm
         '
         Me.btnSaveOrder.Location = New System.Drawing.Point(337, 449)
         Me.btnSaveOrder.Name = "btnSaveOrder"
-        Me.btnSaveOrder.Size = New System.Drawing.Size(85, 94)
+        Me.btnSaveOrder.Size = New System.Drawing.Size(85, 45)
         Me.btnSaveOrder.TabIndex = 8
         Me.btnSaveOrder.Text = "Save Order"
         Me.btnSaveOrder.UseVisualStyleBackColor = True
@@ -191,23 +228,21 @@ Partial Class OrderForm
         Me.grpOrderInfo.TabStop = False
         Me.grpOrderInfo.Text = "Order Information"
         '
-        'lblOrderNo
+        'txtServerName
         '
-        Me.lblOrderNo.AutoSize = True
-        Me.lblOrderNo.Location = New System.Drawing.Point(33, 19)
-        Me.lblOrderNo.Name = "lblOrderNo"
-        Me.lblOrderNo.Size = New System.Drawing.Size(49, 13)
-        Me.lblOrderNo.TabIndex = 0
-        Me.lblOrderNo.Text = "Order #: "
+        Me.txtServerName.Location = New System.Drawing.Point(88, 38)
+        Me.txtServerName.Name = "txtServerName"
+        Me.txtServerName.Size = New System.Drawing.Size(100, 20)
+        Me.txtServerName.TabIndex = 4
+        Me.txtServerName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'lblServer
+        'txtOrderNo
         '
-        Me.lblServer.AutoSize = True
-        Me.lblServer.Location = New System.Drawing.Point(7, 45)
-        Me.lblServer.Name = "lblServer"
-        Me.lblServer.Size = New System.Drawing.Size(75, 13)
-        Me.lblServer.TabIndex = 1
-        Me.lblServer.Text = "Server Name: "
+        Me.txtOrderNo.Location = New System.Drawing.Point(88, 12)
+        Me.txtOrderNo.Name = "txtOrderNo"
+        Me.txtOrderNo.Size = New System.Drawing.Size(100, 20)
+        Me.txtOrderNo.TabIndex = 3
+        Me.txtOrderNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lblDateTime
         '
@@ -218,21 +253,23 @@ Partial Class OrderForm
         Me.lblDateTime.TabIndex = 2
         Me.lblDateTime.Text = "Date/Time: "
         '
-        'txtOrderNo
+        'lblServer
         '
-        Me.txtOrderNo.Location = New System.Drawing.Point(88, 12)
-        Me.txtOrderNo.Name = "txtOrderNo"
-        Me.txtOrderNo.Size = New System.Drawing.Size(100, 20)
-        Me.txtOrderNo.TabIndex = 3
-        Me.txtOrderNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.lblServer.AutoSize = True
+        Me.lblServer.Location = New System.Drawing.Point(7, 45)
+        Me.lblServer.Name = "lblServer"
+        Me.lblServer.Size = New System.Drawing.Size(75, 13)
+        Me.lblServer.TabIndex = 1
+        Me.lblServer.Text = "Server Name: "
         '
-        'txtServerName
+        'lblOrderNo
         '
-        Me.txtServerName.Location = New System.Drawing.Point(88, 38)
-        Me.txtServerName.Name = "txtServerName"
-        Me.txtServerName.Size = New System.Drawing.Size(100, 20)
-        Me.txtServerName.TabIndex = 4
-        Me.txtServerName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.lblOrderNo.AutoSize = True
+        Me.lblOrderNo.Location = New System.Drawing.Point(33, 19)
+        Me.lblOrderNo.Name = "lblOrderNo"
+        Me.lblOrderNo.Size = New System.Drawing.Size(49, 13)
+        Me.lblOrderNo.TabIndex = 0
+        Me.lblOrderNo.Text = "Order #: "
         '
         'tmr
         '
@@ -258,12 +295,22 @@ Partial Class OrderForm
         Me.Label2.TabIndex = 12
         Me.Label2.Text = "3801 Temple Ave." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Pomona, CA 91768"
         '
+        'btnDelete
+        '
+        Me.btnDelete.Location = New System.Drawing.Point(338, 500)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.Size = New System.Drawing.Size(84, 43)
+        Me.btnDelete.TabIndex = 13
+        Me.btnDelete.Text = "Delete Order"
+        Me.btnDelete.UseVisualStyleBackColor = True
+        '
         'OrderForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(665, 556)
+        Me.Controls.Add(Me.btnDelete)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.grpOrderInfo)
@@ -313,5 +360,9 @@ Partial Class OrderForm
     Friend WithEvents tmr As System.Windows.Forms.Timer
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents lblSalesTotalValue As System.Windows.Forms.Label
+    Friend WithEvents lblSalesTaxValue As System.Windows.Forms.Label
+    Friend WithEvents lblOrderTotalValue As System.Windows.Forms.Label
+    Friend WithEvents btnDelete As System.Windows.Forms.Button
 
 End Class
